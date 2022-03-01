@@ -13,6 +13,9 @@ A simple web UI for [synclip](https://github.com/TsingJyujing/synclip).
 
 ```bash
 docker build -t tsingjyujing/synclip-frontend --build-arg REACT_APP_BACKEND_API_ENDPOINT=http://127.0.0.1:8080/ .
+
+# Test
+docker run -it -p ${YOUR_LOCAL_PORT}:80 tsingjyujing/synclip-frontend
 ```
 
 Please set `REACT_APP_BACKEND_API_ENDPOINT` to your API endpoint.

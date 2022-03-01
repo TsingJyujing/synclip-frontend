@@ -1,7 +1,7 @@
 FROM node:17.2-buster as build-deps
 WORKDIR /usr/src/app
 # Install packages
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock tsconfig.json ./
 RUN yarn
 # Build
 COPY src/ src/
