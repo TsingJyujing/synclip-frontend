@@ -28,6 +28,7 @@ export default function EditClipboard({
     const [severity, setSeverity] = useState<AlertColor>("error");
     const [alertText, setAlertText] = useState("");
     const [value, setValue] = React.useState("");
+    const [QRCodeValue, setQRCodeValue] = React.useState("");
     const [cacheId, setCacheId] = React.useState(0);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,7 +145,7 @@ export default function EditClipboard({
                                 {t("save")}
                             </LoadingButton>
                         </Grid>
-                        <Grid item xs={6} md={4}>
+                        <Grid item xs={6} md={3}>
                             <FormControlLabel
                                 control={
                                     <Checkbox checked={data.deleteAfterConfirmation} onChange={handleDeleteAfterConfirmationChange} name="deleteAfterConfirmation" />
@@ -152,7 +153,7 @@ export default function EditClipboard({
                                 label={t("confirmation is requires before deleting item").toString()}
                             />
                         </Grid>
-                        <Grid item xs={6} md={4}>
+                        <Grid item xs={6} md={3}>
                             <FormControlLabel
                                 control={
                                     <Checkbox checked={data.createByShortcut} onChange={handleCreateByShortcutChange} name="createByShortcut" />
@@ -163,6 +164,7 @@ export default function EditClipboard({
                         <Grid item xs={6} md={2}>
                             <Button
                                 onClick={() => {
+                                    setQRCodeValue(window.location.toString())
                                     setOpenQRCode(true)
                                 }}
                                 variant="contained"
@@ -170,6 +172,19 @@ export default function EditClipboard({
                                 size="large"
                             >
                                 {t("QR Code")}
+                            </Button>
+                        </Grid>
+                        <Grid item xs={6} md={2}>
+                            <Button
+                                onClick={() => {
+                                    setQRCodeValue(V1Api.getInstance().getUri(`/api/clipboard/${clipId}`))
+                                    setOpenQRCode(true)
+                                }}
+                                variant="contained"
+                                fullWidth
+                                size="large"
+                            >
+                                {"APP" + t("QR Code")}
                             </Button>
                         </Grid>
                         <Grid item xs={6} md={2}>
@@ -201,7 +216,7 @@ export default function EditClipboard({
                     {t("Use App to scan this QR code")}
                 </DialogTitle>
                 <DialogContent dividers>
-                    <QRCode value={V1Api.getInstance().getUri(`/api/clipboard/${clipId}`)} />
+                    <QRCode value={QRCodeValue} />
                 </DialogContent>
             </Dialog>
         </Box>
