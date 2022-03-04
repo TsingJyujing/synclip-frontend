@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import { Counter } from "util/Utils";
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import i18n from "i18n";
@@ -21,13 +21,17 @@ export const LocalClipboardHistory = () => {
             Array.from(Counter(window.localStorage.length)).map(i => window.localStorage.key(i)).map(k => {
                 if (k !== null) {
                     const v = window.localStorage.getItem(k);
-                    return <ListItemButton component="a" href={`/clipboard/${k}`}>
-                    <ListItemIcon><ContentPasteGoIcon color="success"/></ListItemIcon>
-                        <ListItemText
-                            primary={v || t("No Name")}
-                            secondary={k}
-                        />
-                    </ListItemButton>
+                    return (
+                        <ListItemButton component="a" href={`/clipboard/${k}`}>
+                            <ListItemIcon><ContentPasteGoIcon color="success" /></ListItemIcon>
+                            <ListItemText
+                                primary={v || t("No Name")}
+                                secondary={k}
+                            />
+                        </ListItemButton>
+                    );
+                } else {
+                    return undefined;
                 }
             })
         }
