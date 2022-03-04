@@ -68,8 +68,8 @@ export default function EditClipboard({
         V1Api.getInstance().deleteClipboard(clipId),
         {
             onSuccess: () => {
-                window.location.pathname = "/";
                 window.localStorage.removeItem(clipId);
+                window.location.pathname = "/";
             },
             onError: (error) => {
                 setSeverity("error");
