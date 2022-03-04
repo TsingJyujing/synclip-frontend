@@ -1,104 +1,53 @@
-// TODO update this to latest API
-import React from 'react';
-import { Container, Divider, List, ListItem, ListItemIcon, ListItemText, Hidden, IconButton, Drawer, Typography, Toolbar, AppBar } from "@mui/material";
-import clsx from 'clsx';
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import HomeIcon from '@mui/icons-material/Home';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
 import GitHubIcon from '@mui/icons-material/GitHub';
-
+import Typography from '@mui/material/Typography';
 import i18n from 'i18n';
 import CreateClipboardButton from 'component/CreateClipboardButton';
-import { makeStyles, createStyles, useTheme, Theme } from '@material-ui/core/styles';
 import { LocalClipboardHistory } from 'component/LocalClipboardHistory';
+import { Button, ListItemButton } from '@mui/material';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+const drawerWidth = 300;
 
-const drawerWidth = 240;
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        appBar: {
-            [theme.breakpoints.up('sm')]: {
-                width: `100%`,
-                marginLeft: drawerWidth,
-            },
-        },
-        appBarShift: {
-            width: `calc(100% - ${drawerWidth}px)`,
-            marginLeft: drawerWidth,
-            transition: theme.transitions.create(['margin', 'width'], {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        },
-        menuButton: {
-            marginRight: theme.spacing(2),
-        },
-        title: {
-            flexGrow: 1,
-        },
-        toolbar: theme.mixins.toolbar,
-        drawer: {
-            width: drawerWidth,
-            flexShrink: 0,
-        },
-        drawerPaper: {
-            width: drawerWidth,
-        },
-        drawerHeader: {
-            display: 'flex',
-            alignItems: 'center',
-            padding: theme.spacing(0, 1),
-            // necessary for content to be below app bar
-            ...theme.mixins.toolbar,
-            justifyContent: 'flex-end',
-        },
-        content: {
-            flexGrow: 1,
-            padding: theme.spacing(3),
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            marginLeft: 0,
-        },
-        contentShift: {
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-            marginLeft: drawerWidth,
-        },
-    }),
-);
-
-type Props = {
+interface Props {
     children?: JSX.Element;
-};
-
+}
 
 export default function AppBasic({ children }: Props) {
     const { t } = i18n;
-    const classes = useStyles();
-    const theme = useTheme();
-    const container = window !== undefined ? () => window.document.body : undefined;
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+
     const handleDrawerToggle = () => {
-        setDrawerOpen(!drawerOpen);
+        setMobileOpen(!mobileOpen);
     };
 
     const drawer = (
         <div>
-            <div className={classes.toolbar} />
             <Divider />
             <List>
+                <ListItemButton component="a" href="/">
+                    <ListItemIcon><HomeIcon color="info"/></ListItemIcon>
+                    {t("home")}
+                </ListItemButton>
                 <ListItem>
                     <CreateClipboardButton />
                 </ListItem>
             </List>
-            
+
             <Divider />
             <LocalClipboardHistory />
-
             <Divider />
             <List>
                 <ListItem button
@@ -114,48 +63,78 @@ export default function AppBasic({ children }: Props) {
         </div>
     );
 
+    const container = window !== undefined ? () => window.document.body : undefined;
+
     return (
-        <div className={classes.root}>
-            <AppBar position="fixed" className={clsx(classes.appBar, {
-                [classes.appBarShift]: drawerOpen,
-            })}>
+        <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
+            <AppBar
+                position="fixed"
+                sx={{
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    ml: { sm: `${drawerWidth}px` },
+                }}
+            >
                 <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu"
-                        onClick={handleDrawerToggle}>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}>
+                    <Typography variant="h6" noWrap component="div">
                         Synclip
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <nav className={classes.drawer} aria-label="mailbox folders">
-                <Hidden smUp implementation="css">
-                    <Drawer
-                        container={container}
-                        variant="temporary"
-                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                        open={drawerOpen}
-                        onClose={handleDrawerToggle}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
-                        }}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-            </nav>
-            <main className={clsx(classes.content, {
-                [classes.contentShift]: drawerOpen,
-            })}>
-                <Container>
-                    <div className={classes.drawerHeader} />
-                    {children}
-                </Container>
-            </main>
-        </div>
+            <Box
+                component="nav"
+                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                aria-label="mailbox folders"
+            >
+                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                <Drawer
+                    container={container}
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                    sx={{
+                        display: { xs: 'block', sm: 'none' },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                    }}
+                >
+                    <Toolbar >
+                        <Button onClick={handleDrawerToggle} startIcon={<ArrowLeftIcon />}>
+                            {t("hide sidebar")}
+                        </Button>
+                    </Toolbar>
+                    {drawer}
+                </Drawer>
+                <Drawer
+                    variant="permanent"
+                    sx={{
+                        display: { xs: 'none', sm: 'block' },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                    }}
+                    open
+                >
+                    <Toolbar ></Toolbar>
+                    {drawer}
+                </Drawer>
+            </Box>
+            <Box
+                component="main"
+                sx={{ flexGrow: 1, p: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+            >
+                <Toolbar />
+                {children}
+            </Box>
+        </Box>
     );
 }

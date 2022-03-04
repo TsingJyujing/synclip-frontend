@@ -27,6 +27,10 @@
         "QR Code": "QR Code",
         "No Name": "Unnamed",
         "Firefox notify": "You're using firefox! You need to set dom.events.asyncClipboard.clipboardItem preference to true if you want to copy image to clipboard. To change preferences in Firefox, visit about:config.",
-        "created at": "Created at"
+        "created at": "Created at",
+        "clear all history?":"Do you want to clear all history?",
+        "clear history":"Clear History",
+        "hide sidebar":"Hide Sidebar",
+        "home":"Home"
     }
 }

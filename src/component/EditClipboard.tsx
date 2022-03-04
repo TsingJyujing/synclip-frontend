@@ -145,7 +145,7 @@ export default function EditClipboard({
                                 {t("save")}
                             </LoadingButton>
                         </Grid>
-                        <Grid item xs={6} md={3}>
+                        <Grid item xs={12} md={6} lg={3}>
                             <FormControlLabel
                                 control={
                                     <Checkbox checked={data.deleteAfterConfirmation} onChange={handleDeleteAfterConfirmationChange} name="deleteAfterConfirmation" />
@@ -153,7 +153,7 @@ export default function EditClipboard({
                                 label={t("confirmation is requires before deleting item").toString()}
                             />
                         </Grid>
-                        <Grid item xs={6} md={3}>
+                        <Grid item xs={12} md={6} lg={3}>
                             <FormControlLabel
                                 control={
                                     <Checkbox checked={data.createByShortcut} onChange={handleCreateByShortcutChange} name="createByShortcut" />
@@ -161,7 +161,7 @@ export default function EditClipboard({
                                 label={t("create item by shortcut directly").toString()}
                             />
                         </Grid>
-                        <Grid item xs={6} md={2}>
+                        <Grid item xs={12} md={4} lg={2}>
                             <Button
                                 onClick={() => {
                                     setQRCodeValue(window.location.toString())
@@ -174,7 +174,7 @@ export default function EditClipboard({
                                 {t("QR Code")}
                             </Button>
                         </Grid>
-                        <Grid item xs={6} md={2}>
+                        <Grid item xs={12} md={4} lg={2}>
                             <Button
                                 onClick={() => {
                                     setQRCodeValue(V1Api.getInstance().getUri(`/api/clipboard/${clipId}`))
@@ -187,7 +187,7 @@ export default function EditClipboard({
                                 {"APP" + t("QR Code")}
                             </Button>
                         </Grid>
-                        <Grid item xs={6} md={2}>
+                        <Grid item xs={12} md={4} lg={2}>
                             <LoadingButton
                                 onClick={() => {
                                     if (window.confirm(t("do you want to delete the whole clipboard?"))) {

@@ -187,7 +187,7 @@ export default function ClipboardPage() {
     if (clipId === undefined) {
         return <Alert severity={"error"} sx={{ width: '100%' }} />;
     }
-    return <Grid container spacing={1}>
+    return <Grid container spacing={2}>
         <Helmet><title>Synclip</title></Helmet>
         <Grid item xs={12}>
             <EditClipboard

@@ -30,15 +30,14 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
-        <AppBasic>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/clipboard/:clipId" element={<Clipboard />} />
-              <Route path="*" element={NoMatch} />
-            </Routes>
-          </BrowserRouter>
-        </AppBasic>
+
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/clipboard/:clipId" element={<AppBasic><Clipboard /></AppBasic>} />
+            <Route path="*" element={NoMatch} />
+          </Routes>
+        </BrowserRouter>
       </QueryClientProvider>
     </ThemeProvider>
   </React.StrictMode>,
