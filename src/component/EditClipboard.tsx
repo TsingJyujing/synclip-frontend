@@ -68,7 +68,6 @@ export default function EditClipboard({
         V1Api.getInstance().deleteClipboard(clipId),
         {
             onSuccess: () => {
-                window.localStorage.removeItem(clipId);
                 window.location.pathname = "/";
             },
             onError: (error) => {
@@ -191,7 +190,9 @@ export default function EditClipboard({
                             <LoadingButton
                                 onClick={() => {
                                     if (window.confirm(t("do you want to delete the whole clipboard?"))) {
-                                        deleteClipboard.mutate()
+                                        deleteClipboard.mutateAsync().then(()=>{
+                                            window.localStorage.removeItem(clipId);
+                                        })
                                     }
                                 }}
                                 loading={deleteClipboard.isLoading}
