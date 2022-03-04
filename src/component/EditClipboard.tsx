@@ -184,7 +184,7 @@ export default function EditClipboard({
                                 fullWidth
                                 size="large"
                             >
-                                {"APP" + t("QR Code")}
+                                {"APP " + t("QR Code")}
                             </Button>
                         </Grid>
                         <Grid item xs={12} md={4} lg={2}>
@@ -212,9 +212,6 @@ export default function EditClipboard({
                 aria-labelledby="customized-dialog-title"
                 open={openQRCode}
             >
-                <DialogTitle>
-                    {t("Use App to scan this QR code")}
-                </DialogTitle>
                 <DialogContent dividers>
                     <QRCode value={QRCodeValue} />
                 </DialogContent>
