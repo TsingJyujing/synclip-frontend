@@ -138,7 +138,7 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
         </ListItemAvatar>) : undefined}
 
         <ListItemButton onClick={() => {
-            if (!isText && stringContent === undefined) {
+            if (isText && stringContent === undefined) {
                 getStringContentMutation.mutateAsync().then(() => setOpenDetail(true))
             } else {
                 setOpenDetail(true)
