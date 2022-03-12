@@ -31,6 +31,7 @@
         "clear all history?":"是否要清除所有历史记录？",
         "clear history":"清除历史记录",
         "hide sidebar":"隐藏侧边栏",
-        "home":"主页"
+        "home":"主页",
+        "upload image": "上传图片"
     }
 }

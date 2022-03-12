@@ -196,13 +196,14 @@ export default function ClipboardPage() {
                 setDeleteAfterConfirmation={setDeleteAfterConfirmation}
             />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={6} lg={4}>
             <CreateClipboardItemButton
                 key="create-clipboard-item"
                 clipId={clipId}
                 reloadList={disableCache}
                 createByShortcutRef={createByShortcutRef}
             />
+
         </Grid>
         <Grid item xs={12}>
             <ClipItemsList
