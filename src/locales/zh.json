@@ -32,6 +32,7 @@
         "clear history":"清除历史记录",
         "hide sidebar":"隐藏侧边栏",
         "home":"主页",
-        "upload image": "上传图片"
+        "upload image": "上传图片",
+        "do you want to remove this item from history list?": "您是否确认需要清除此条历史记录？"
     }
 }
