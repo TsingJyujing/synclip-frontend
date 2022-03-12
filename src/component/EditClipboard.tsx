@@ -39,9 +39,10 @@ export default function EditClipboard({
         [clipId, cacheId],
         V1Api.getInstance().getClipboard(clipId),
         {
-            onError: ()=>{
+            onError: () => {
                 window.localStorage.removeItem(clipId)
-            }
+            },
+            keepPreviousData: true
         }
     );
 
@@ -99,15 +100,13 @@ export default function EditClipboard({
         setValue(data.nickName);
     }
 
-    if (isLoading) {
-        return <LinearProgress />;
-    }
-
     if (isError || data === undefined) {
         console.error(`Error while fetching clipboard: ${error}`);
         return <Alert severity={"error"} sx={{ width: '100%' }} >{t("failed to fetch items")}</Alert>;
     }
-
+    if (data === undefined) {
+        return <LinearProgress />;
+    }
     setDeleteAfterConfirmation(data.deleteAfterConfirmation);
     setCreateByShortcut(data.createByShortcut);
     window.localStorage.setItem(clipId, data.nickName);
@@ -190,7 +189,7 @@ export default function EditClipboard({
                             <LoadingButton
                                 onClick={() => {
                                     if (window.confirm(t("do you want to delete the whole clipboard?"))) {
-                                        deleteClipboard.mutateAsync().then(()=>{
+                                        deleteClipboard.mutateAsync().then(() => {
                                             window.localStorage.removeItem(clipId);
                                         })
                                     }

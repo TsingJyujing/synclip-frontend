@@ -88,6 +88,7 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
                 <DeleteIcon color="error" />
             </IconButton>
         }
+        key={item.id}
     >
         <ListItemAvatar >
             <ListItemButton onClick={copyToClipboard}>
@@ -141,14 +142,17 @@ function ClipItemsList({ clipId, deleteAfterConfirmation, cacheId, reloadList }:
     const pageSize = 50;
     const { isLoading, isError, data, error } = useQuery<ListClipItems>(
         [clipId, pageId, pageSize, cacheId],
-        V1Api.getInstance().getClipboardItems(clipId, pageId, pageSize)
+        V1Api.getInstance().getClipboardItems(clipId, pageId, pageSize),
+        {
+            keepPreviousData: true
+        }
     );
-    if (isLoading) {
-        return <LinearProgress />;
-    }
-    if (isError || data === undefined) {
+    if (isError) {
         console.error(`Error while fetching clip items: ${error}`);
         return <Alert severity={"error"} sx={{ width: '100%' }} >{t("failed to fetch items")}</Alert>;
+    }
+    if (data === undefined) {
+        return <LinearProgress />;
     }
     const pageCount = Math.max(data.totalPages, 1);
     return (
