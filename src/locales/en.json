@@ -33,6 +33,9 @@
         "hide sidebar": "Hide Sidebar",
         "home": "Home",
         "upload image": "Upload Image",
-        "do you want to remove this item from history list?": "Do you want to remove this item from history list?"
+        "do you want to remove this item from history list?": "Do you want to remove this item from history list?",
+        "content details": "Content details",
+        "content":"Content",
+        "urls":"URLs"
     }
 }

@@ -22,7 +22,7 @@ function SelectImageButton({ imageHandler, caption }: UploadImageButtonProps) {
         <label htmlFor="icon-button-file">
             <Input accept="image/*" id="icon-button-file" type="file" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const files = event.target.files;
-                if (files != undefined && files.length > 0) {
+                if (files !== undefined && files !== null && files.length > 0) {
                     imageHandler(files[0])
                 }
             }} />
@@ -156,6 +156,8 @@ export default function CreateClipboardItemButton({ clipId, reloadList, createBy
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={open}
+                fullWidth
+                maxWidth="lg"
             >
                 <DialogTitle>
                     {t("create clipboard item")}
@@ -168,8 +170,9 @@ export default function CreateClipboardItemButton({ clipId, reloadList, createBy
                             multiline
                             value={value?.content}
                             onChange={handleChange}
+                            fullWidth
                         />) : (
-                            <img src={value.content} alt="from clipboard" />
+                            <img src={value.content} style={{ "width": "100%" }} alt="from clipboard" />
                         )
                     }
                 </DialogContent>

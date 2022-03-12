@@ -10,14 +10,30 @@ import { Alert, AlertSnackbar } from "component/Alert";
 import { PaginatorWithCombo } from "component/Paginator";
 import V1Api, { ClipItem, ListClipItems } from "http/V1Api";
 
-import { AlertColor, IconButton, LinearProgress, ListItemAvatar, List, ListItemButton, ListItem, ListItemText, Avatar, Grid } from "@mui/material";
+import {
+    AlertColor,
+    IconButton,
+    LinearProgress,
+    ListItemAvatar,
+    List,
+    ListItemButton,
+    ListItem,
+    ListItemText,
+    Avatar,
+    Grid,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+} from "@mui/material";
 
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import clipboard from 'clipboardy';
-import { copyImageToClipboard } from 'copy-image-clipboard'
+import { copyImageToClipboard } from 'copy-image-clipboard';
+import { SmartText } from "component/SmartText";
+import { convertDateToLocal } from "util/Utils";
 
 type ClipItemBoxProp = {
     clipId: string;
@@ -29,10 +45,13 @@ type ClipItemBoxProp = {
 function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: ClipItemBoxProp) {
     const { t } = i18n;
     const [open, setOpen] = useState(false);
+    const [openDetail, setOpenDetail] = React.useState(false);
+    const [stringContent, setStringContent] = useState<string | undefined>();
     const [severity, setSeverity] = useState<AlertColor>("error");
     const [alertText, setAlertText] = useState("");
 
     const isImage = item.mimeType.match(/image\/.*/) !== null;
+    const isText = item.mimeType.match(/text\/.*/) !== null;
 
     const deleteItemMutation = useMutation(
         V1Api.getInstance().deleteClipboardItem(clipId, item.id),
@@ -43,7 +62,7 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
                 setSeverity("error");
                 setAlertText(t("failed to delete item") + JSON.stringify(error));
                 setOpen(true);
-            }
+            },
         }
     );
 
@@ -56,7 +75,9 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
     const getStringContentMutation = useMutation(
         V1Api.getInstance().getClipboardItemStringContent(clipId, item.id),
         {
-            onSuccess: (data) => clipboard.write(data).then(notifyCopySuccess),
+            onSuccess: (data) => {
+                setStringContent(data)
+            },
             onError: () => {
                 setSeverity("error");
                 setAlertText(t("failed to fetch items"));
@@ -73,8 +94,14 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
             copyImageToClipboard(contentUrl).then(notifyCopySuccess).catch((e) => {
                 console.error('Error while copy image to clipboard:', e)
             })
+        } else if (isText) {
+            getStringContentMutation.mutateAsync().then(
+                (data) => {
+                    clipboard.write(data).then(notifyCopySuccess)
+                }
+            )
         } else {
-            getStringContentMutation.mutate()
+            throw Error(`Can't handle item ${JSON.stringify(item)}`)
         }
     }
 
@@ -110,11 +137,17 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
             </ListItemButton>
         </ListItemAvatar>) : undefined}
 
-        <ListItemButton onClick={copyToClipboard} >
+        <ListItemButton onClick={() => {
+            if (!isText && stringContent === undefined) {
+                getStringContentMutation.mutateAsync().then(() => setOpenDetail(true))
+            } else {
+                setOpenDetail(true)
+            }
+
+        }} >
             <ListItemText
                 primary={item.preview}
-                // TODO convert to local timezone (use UTC for server)
-                secondary={`${t("created at")} ${item.created}`}
+                secondary={`${t("created at")} ${convertDateToLocal(item.created)}`}
             />
         </ListItemButton>
 
@@ -125,6 +158,27 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
         >
             {alertText}
         </AlertSnackbar>
+
+        <Dialog
+            onClose={() => setOpenDetail(false)}
+            aria-labelledby="customized-dialog-title"
+            open={openDetail}
+            fullWidth={true}
+            maxWidth="lg"
+        >
+            <DialogTitle>
+                {t("content details")}
+            </DialogTitle>
+            <DialogContent dividers>
+                {
+                    isImage ? <img style={{ "width": "100%" }} src={
+                        V1Api.getInstance().getUri(`/api/clipboard/${clipId}/item/${item.id}/content/`)
+                    } alt="detail" /> : (
+                        stringContent === undefined ? <LinearProgress /> : <SmartText content={stringContent} />
+                    )
+                }
+            </DialogContent>
+        </Dialog>
 
     </ListItem>
 }
@@ -140,7 +194,7 @@ function ClipItemsList({ clipId, deleteAfterConfirmation, cacheId, reloadList }:
     const { t } = i18n;
     const [pageId, setPageId] = useState(1);
     const pageSize = 50;
-    const { isLoading, isError, data, error } = useQuery<ListClipItems>(
+    const { isError, data, error } = useQuery<ListClipItems>(
         [clipId, pageId, pageSize, cacheId],
         V1Api.getInstance().getClipboardItems(clipId, pageId, pageSize),
         {
