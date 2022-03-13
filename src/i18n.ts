@@ -1,11 +1,13 @@
 import ZH from "locales/zh.json";
 import EN from "locales/en.json";
+import JP from "locales/jp.json";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 export const resources = {
     en: EN,
-    zh: ZH
+    zh: ZH,
+    jp: JP,
 } as const;
 
 function getBrowserLocales(options = {}) {
