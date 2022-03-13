@@ -117,11 +117,17 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
         }
         key={item.id}
     >
-        <ListItemAvatar >
+        {isText ? <ListItemAvatar >
             <ListItemButton onClick={copyToClipboard}>
                 <ContentCopyIcon color="success" />
             </ListItemButton>
-        </ListItemAvatar>
+        </ListItemAvatar> : undefined}
+
+        {isImage ? (<ListItemAvatar >
+            <ListItemButton onClick={copyToClipboard}>
+                <Avatar src={V1Api.getInstance().getUri(`/api/clipboard/${clipId}/item/${item.id}/preview/`)} variant="rounded" />
+            </ListItemButton>
+        </ListItemAvatar>) : undefined}
 
         {isImage ? (<ListItemAvatar >
             <Link to={V1Api.getInstance().getUri(`/api/clipboard/${clipId}/item/${item.id}/content/`)} download={`${item.id}`} target="_blank">
@@ -130,13 +136,7 @@ function ClipItemBox({ clipId, item, reloadList, deleteAfterConfirmation }: Clip
                 </ListItemButton>
             </Link>
         </ListItemAvatar>) : undefined}
-
-        {isImage ? (<ListItemAvatar >
-            <ListItemButton onClick={copyToClipboard}>
-                <Avatar src={V1Api.getInstance().getUri(`/api/clipboard/${clipId}/item/${item.id}/preview/`)} variant="rounded" />
-            </ListItemButton>
-        </ListItemAvatar>) : undefined}
-
+        
         <ListItemButton onClick={() => {
             if (isText && stringContent === undefined) {
                 getStringContentMutation.mutateAsync().then(() => setOpenDetail(true))
