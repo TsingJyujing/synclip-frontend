@@ -28,7 +28,7 @@ export const SmartText = ({ content }: SmartTextProps) => {
             <Typography variant="h6">
                 {t("content")}
             </Typography>
-            <Typography>
+            <Typography style={{ wordWrap: "break-word", lineBreak: "anywhere" }} >
                 {content}
             </Typography>
         </Grid>
@@ -49,7 +49,9 @@ export const SmartText = ({ content }: SmartTextProps) => {
                                     </IconButton>
                                 }>
                                     <Link href={value} target="_blank">
-                                        {value}
+                                        <Typography style={{ wordWrap: "break-word", lineBreak: "anywhere" }} >
+                                            {value}
+                                        </Typography>
                                     </Link>
                                 </ListItem>
                             ))
