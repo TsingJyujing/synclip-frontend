@@ -124,7 +124,6 @@ export default function AppBasic({ children }: Props) {
                     }}
                     open
                 >
-                    <Toolbar ></Toolbar>
                     {drawer}
                 </Drawer>
             </Box>

@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import AppBasic from "AppBasic";
-import theme from "theme";
+import MyThemeProvider from "MyThemeProvider";
 import Home from "view/Home";
 import Clipboard from 'view/ClipboardPage';
 import { CssBaseline, ThemeProvider } from '@mui/material';
@@ -27,10 +27,8 @@ function NoMatch() {
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <MyThemeProvider >
       <QueryClientProvider client={queryClient}>
-
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -39,7 +37,7 @@ ReactDOM.render(
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
-    </ThemeProvider>
+    </MyThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
