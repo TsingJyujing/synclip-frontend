@@ -172,7 +172,8 @@ export default function EditClipboard({
                                 {t("QR Code")}
                             </Button>
                         </Grid>
-                        <Grid item xs={12} md={4} lg={2}>
+                        {/* TODO show this QR code after finished APP */}
+                        <Grid item xs={12} md={4} lg={2} sx={{ display: 'none' }}>
                             <Button
                                 onClick={() => {
                                     setQRCodeValue(V1Api.getInstance().getUri(`/api/clipboard/${clipId}`))
