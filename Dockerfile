@@ -1,4 +1,4 @@
-FROM node:17.2-buster as build-deps
+FROM node:20-slim as build-deps
 WORKDIR /usr/src/app
 # Install packages
 COPY package.json yarn.lock tsconfig.json ./
@@ -11,7 +11,7 @@ ARG REACT_APP_BACKEND_API_ENDPOINT
 RUN yarn build
 
 # Nginx
-FROM nginx:1.21-alpine
+FROM nginx:stable-alpine-slim
 COPY --from=build-deps /usr/src/app/build /usr/share/nginx/html
 COPY ./config/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
