@@ -27,7 +27,7 @@ jobs:
             REACT_APP_BACKEND_API_ENDPOINT=https://synclip-api.tsingjyujing.com/
           context: .
           file: Dockerfile
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: tsingjyujing/synclip-frontend:latest
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USER }}/synclip-frontend:buildcache
